@@ -11,7 +11,8 @@ sleeps for a second, and loops again provided the stop flag hasn't been set.
 (See the `loop` function)
 
 The algorithm function is called as a pointer to a function - `(*algo_p)()`
-- this pointer can point to one of several algorithm functions, and can be
+
+This pointer can point to one of several algorithm functions, and can be
 reassigned on the fly at any time. Since `algo_p` is defined in the global
 scope, this can be done from anywhere, including outside the thread.
 
@@ -29,31 +30,30 @@ pointer if the function still hasn't been loaded.
 You can compile the demo.c program with `gcc demo.c -l pthread -ldl -o demo`
 A simple example run flipping between alorithms 1 and 2 might look like:
 
-> -bash-4.2$ ./demo 
-> value is 0
-> value is 0
-> 2
-> Switching to algo2
-> value is 1
-> value is 2
-> value is 3
-> 1
-> Switching to algo1
-> value is 3
-> value is 3
-> value is 3
-> 2
-> Switching to algo2
-> value is 4
-> value is 5
-> value is 6
-> 1
-> Switching to algo1
-> value is 6
-> value is 6
-> value is 6
-> q
-> -bash-4.2$ 
+> ./demo   
+> value is 0  
+> value is 0  
+> 2  
+> Switching to algo2  
+> value is 1  
+> value is 2  
+> value is 3  
+> 1  
+> Switching to algo1  
+> value is 3  
+> value is 3  
+> value is 3  
+> 2  
+> Switching to algo2  
+> value is 4  
+> value is 5  
+> value is 6  
+> 1  
+> Switching to algo1  
+> value is 6  
+> value is 6  
+> value is 6  
+> q  
 
 Exciting, huh? We've simply demonstrated here how to reassign a pointer to
 a function to point to different functions in one place in the code, and that
@@ -78,133 +78,135 @@ The 'o' command opens the dynamic library and assigns the 'algo3' pointer
 to function variable to point to the algo3 symbol in that library.
 After we've done that, we can use '3' to set the algo_p pointer to point to it.
 
-> -bash-4.2$ ./demo
-> value is 0
-> 2
-> Switching to algo2
-> value is 1
-> value is 2
-> value is 3
-> 1
-> Switching to algo1
-> value is 3
-> o
-> Opening dynamic library.
-> value is 3
-> value is 3
-> 3
-> Switching to algo3
-> value is -3
-> value is 3
-> value is -3
-> 1
-> Switching to algo1
-> value is -3
-> value is -3
-> q
-
+> ./demo  
+> value is 0  
+> 2  
+> Switching to algo2  
+> value is 1  
+> value is 2  
+> value is 3  
+> 1  
+> Switching to algo1  
+> value is 3  
+> o  
+> Opening dynamic library.  
+> value is 3  
+> value is 3  
+> 3  
+> Switching to algo3  
+> value is -3  
+> value is 3  
+> value is -3  
+> 1  
+> Switching to algo1  
+> value is -3  
+> value is -3  
+> q  
+  
 The 'c' command closes the dynamic library. If we still have the address of
 algo3 stored somewhere and we call if after closing the library, bad things
 will happen. 
 
-> -bash-4.2$ ./demo
-> value is 0
-> o
-> Opening dynamic library.
-> value is 0
-> 2
-> Switching to algo2
-> value is 1
-> value is 2
-> 3
-> Switching to algo3
-> value is -2
-> value is 2
-> value is -2
-> c
-> Closing dynamic library.
-> May the force be with you.
-> Segmentation fault
-
+> ./demo  
+> value is 0  
+> o  
+> Opening dynamic library.  
+> value is 0  
+> 2  
+> Switching to algo2  
+> value is 1  
+> value is 2  
+> 3  
+> Switching to algo3  
+> value is -2  
+> value is 2  
+> value is -2  
+> c  
+> Closing dynamic library.  
+> May the force be with you.  
+> Segmentation fault  
+  
 However, if we switch back to algo1 or algo2 first, that's fine:
 
-> -bash-4.2$ ./demo
-> value is 0
-> o
-> Opening dynamic library.
-> value is 0
-> 2
-> Switching to algo2
-> value is 1
-> value is 2
-> value is 3
-> 3
-> Switching to algo3
-> value is -3
-> value is 3
-> value is -3
-> 1
-> Switching to algo1
-> value is -3
-> value is -3
-> c
-> Closing dynamic library.
-> value is -3
-> value is -3
-> 2
-> Switching to algo2
-> value is -2
-> value is -1
-> value is 0
-> value is 1
-> value is 2
-> q
+> ./demo  
+> value is 0  
+> o  
+> Opening dynamic library.  
+> value is 0  
+> 2  
+> Switching to algo2  
+> value is 1  
+> value is 2  
+> value is 3  
+> 3  
+> Switching to algo3  
+> value is -3  
+> value is 3  
+> value is -3  
+> 1  
+> Switching to algo1  
+> value is -3  
+> value is -3  
+> c  
+> Closing dynamic library.  
+> value is -3  
+> value is -3  
+> 2  
+> Switching to algo2  
+> value is -2  
+> value is -1  
+> value is 0  
+> value is 1  
+> value is 2  
+> q  
 
 Now, the really interesting bit. So long as we close it first, we can 
 edit and recompile mylib.so, then reopen it while the program is running:
 
-> -bash-4.2$ ./demo
-> value is 0
-> o
-> Opening dynamic library.
-> value is 0
-> 2
-> Switching to algo2
-> value is 1
-> value is 2
-> value is 3
-> 3
-> Switching to algo3
-> value is -3
-> value is 3
-> value is -3
-> 1
-> Switching to algo1
-> value is -3
-> value is -3
-> c
-> Closing dynamic library.
-> value is -3
-> value is -3
-> ...
+> ./demo  
+> value is 0  
+> o  
+> Opening dynamic library.  
+> value is 0  
+> 2  
+> Switching to algo2  
+> value is 1  
+> value is 2  
+> value is 3  
+> 3  
+> Switching to algo3  
+> value is -3  
+> value is 3  
+> value is -3  
+> 1  
+> Switching to algo1  
+> value is -3  
+> value is -3  
+> c  
+> Closing dynamic library.  
+> value is -3  
+> value is -3  
+> ...  
+
 At this point, leave the program running spitting out -3s, and in another
 terminal go ahead and edit mylib.c to do something different, recompile 
 mylib.so as before, and then you can open it and use the new code in the 
 still running demo program:
-> ...
-> value is -3
-> value is -3
-> o
-> Opening dynamic library.
-> value is -3
-> 3
-> value is 6
-> value is -12
-> value is 24
-> value is -48
-2
-> value is -47
-> value is -46
-> q
+
+> ...  
+> value is -3  
+> value is -3  
+> o  
+> Opening dynamic library.  
+> value is -3  
+> 3  
+> value is 6  
+> value is -12  
+> value is 24  
+> value is -48  
+2  
+> value is -47    
+> value is -46  
+> q  
 
 
